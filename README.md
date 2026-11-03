@@ -72,7 +72,10 @@ You need a Massive API key. The key stays on the server, and the page only ever 
 | Stocks Starter | Yes | 15 minutes delayed |
 | Stocks Developer | Yes | 15 minutes delayed |
 | Stocks Advanced | Yes | 15 minutes delayed |
-| Business plans | Yes | 15 minutes delayed |
+| Stocks Business | Yes | Real time from fair market value (fmv), with `DISPLAY_DELAY_MINUTES=0` |
+| Other Business plans | Yes | 15 minutes delayed |
+
+With a Stocks Business key, the v2 snapshot includes `fmv` (fair market value) for each ticker. The server then refreshes every 30 seconds and moves each tower with its `fmv` in the current minute, instead of the last minute bar's close. Earlier minutes still come from minute bars, and SPY traffic still comes from minute volume. Keys without `fmv` work as before.
 
 Plans and prices are on [massive.com/pricing](https://massive.com/pricing).
 
