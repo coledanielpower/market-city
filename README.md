@@ -66,14 +66,11 @@ You need a Massive API key. The key stays on the server, and the page only ever 
 
 ### Which Massive plans work
 
-| Plan | Works | What the page shows by default |
+| Plan | Works | What the page shows |
 |---|---|---|
 | Stocks Basic (free) | Lite mode | 12 towers, one per sector, from the last full session. No live view |
-| Stocks Starter | Yes | 15 minutes delayed |
-| Stocks Developer | Yes | 15 minutes delayed |
-| Stocks Advanced | Yes | 15 minutes delayed |
-| Stocks Business | Yes | Real time from fair market value (fmv), with `DISPLAY_DELAY_MINUTES=0` |
-| Other Business plans | Yes | 15 minutes delayed |
+| Stocks Business | Yes | Real time from fair market value (fmv), updated every 30 seconds |
+| Other paid Stocks plans | Yes | Live from the snapshot's latest minute bar |
 
 With a Stocks Business key, the v2 snapshot includes `fmv` (fair market value) for each ticker. The server then refreshes every 30 seconds and moves each tower with its `fmv` in the current minute, instead of the last minute bar's close. Earlier minutes still come from minute bars, and SPY traffic still comes from minute volume. Keys without `fmv` work as before.
 
@@ -85,7 +82,7 @@ Set `MASSIVE_PLAN=basic` to run on Stocks Basic. The free plan allows 5 calls a 
 
 ### Showing it to other people
 
-By default the server holds back today's newest 15 minutes, and the page labels the view as delayed. Set `DISPLAY_DELAY_MINUTES=0` to show real time. What your plan lets you show to other people is set by Massive, not by this repo: check [massive.com/pricing](https://massive.com/pricing) and [Massive's terms](https://massive.com/legal/terms) before you host it publicly.
+The page shows the newest data with no delay. What your plan lets you show to other people is set by Massive, not by this repo: check [massive.com/pricing](https://massive.com/pricing) and [Massive's terms](https://massive.com/legal/terms) before you host it publicly.
 
 ### Start it
 
@@ -93,7 +90,7 @@ By default the server holds back today's newest 15 minutes, and the page labels 
 cp .env.example .env.local
 ```
 
-Put your key after `MASSIVE_API_KEY=` in `.env.local`. Leave `DISPLAY_DELAY_MINUTES=15` unless your plan allows real-time display. Then start the server (Node 22.9 or later):
+Put your key after `MASSIVE_API_KEY=` in `.env.local`. Then start the server (Node 22.9 or later):
 
 ```bash
 npm start
@@ -109,7 +106,7 @@ The code that talks to Massive lives in `lib/today.mjs`, and each host wraps it.
 
 **Docker** (Fly.io, or any container host): `docker build -t market-city .`, then run it with `-e MASSIVE_API_KEY=...` and port 8811.
 
-**Vercel**: import the repo and add `MASSIVE_API_KEY` as an environment variable, plus `DISPLAY_DELAY_MINUTES` if your plan allows real-time display. The page is served as static files and `api/today.mjs` runs as a function. The session lives in the Vercel Runtime Cache, and the CDN shares each response across viewers.
+**Vercel**: import the repo and add `MASSIVE_API_KEY` as an environment variable. The page is served as static files and `api/today.mjs` runs as a function. The session lives in the Vercel Runtime Cache, and the CDN shares each response across viewers.
 
 The session refreshes on demand, at most once a minute, and only while the market is open.
 

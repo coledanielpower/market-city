@@ -38,7 +38,6 @@ const today = createToday({
   tickers: trackedTickers(universe),
   store: prefixedStore({ get, set }, lite),
   lite,
-  displayDelayMinutes: Number(process.env.DISPLAY_DELAY_MINUTES ?? 15),
   waitUntil,
 });
 

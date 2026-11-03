@@ -25,7 +25,6 @@ const today = createToday({
   tickers: trackedTickers(universe),
   store,
   lite,
-  displayDelayMinutes: Number(process.env.DISPLAY_DELAY_MINUTES ?? 15),
 });
 const examples = createExamples({ key: process.env.MASSIVE_API_KEY, universe, store });
 
